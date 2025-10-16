@@ -2,47 +2,46 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class EICON {
+public class EIFACEBOOK {
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder();
         int n = ni();
         int m = ni();
-        int q = ni();
         Vertex[] vertices = new Vertex[n + 1];
-        
-        // Init vertices
-        for(int i = 1; i < vertices.length; i++) {
-            vertices[i] = new Vertex(i);
+        for (int i = 1; i <= n; i++) {
+            String gender = ns();
+            vertices[i] = new Vertex(i, gender);
         }
-
-        // Add adjacent vertex into a vertex
-        for(int i = 0; i < m; i++) {
+        for (int i = 0; i < m; i++) {
             int u = ni();
             int v = ni();
-            vertices[v].addNeighbor(vertices[u]);
+            if (!vertices[u].neighbors.contains(vertices[v])) {
+                vertices[u].addNeighbor(vertices[v]);
+                vertices[v].addNeighbor(vertices[u]);
+            }
         }
-
-        // Query and output
-        for(int i = 0; i < q; i++) {
-            int a = ni();
-            int b = ni();
-            if (vertices[a].neighbors.contains(vertices[b])) {
-                sb.append("Y\n");
+        for (int i = 1; i <= n; i++) {
+            int count = 0;
+            for (Vertex vertex : vertices[i].neighbors) {
+                if (!vertices[i].gender.equals(vertex.gender)) {
+                    count++;
+                }
             }
-            else {
-                sb.append("N\n");
-            }
+            sb.append(count + " ");
         }
         System.out.println(sb);
     }
 
     static class Vertex {
         int id;
+        String gender;
         ArrayList<Vertex> neighbors = new ArrayList<>();
 
-        public Vertex(int id) {
+        public Vertex(int id, String gender) {
             this.id = id;
+            this.gender = gender;
         }
+
         public void addNeighbor(Vertex v) {
             neighbors.add(v);
         }
