@@ -1,29 +1,39 @@
+package Week1;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class EIMKF {
+public class EIUHCON {
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder();
         int n = ni();
         int m = ni();
-        Vertex[] vertices = new Vertex[n];
-        for (int i = 0; i < n; i++) {
+        int q = ni();
+        Vertex[] vertices = new Vertex[n + 1];
+        for (int i = 1; i <= n; i++) {
             vertices[i] = new Vertex(i);
         }
         for (int i = 0; i < m; i++) {
             int u = ni();
             int v = ni();
-            vertices[u].addNeighbor(vertices[v]);
             vertices[v].addNeighbor(vertices[u]);
         }
-        for (Vertex vertex : vertices) {
-            vertex.neighbors.sort((v1, v2) -> v1.id - v2.id);
-            sb.append(vertex.id + " " + vertex.neighbors.size() + " ");
-            for (int i = 0; i < vertex.neighbors.size(); i++) {
-                sb.append(vertex.neighbors.get(i).id + " ");
+        for (int i = 0; i < q; i++) {
+            int a = ni();
+            int b = ni();
+            if (vertices[a].neighbors.contains(vertices[b])) {
+                sb.append("Y\n");
+            } else {
+                ArrayList<Vertex> neighbors = vertices[a].neighbors;
+                boolean flag = false;
+                for (Vertex vertex : neighbors) {
+                    if (vertex.neighbors.contains(vertices[b])) {
+                        flag = true;
+                        break;
+                    }
+                }
+                sb.append(flag ? "Y\n" : "N\n");
             }
-            sb.append("\n");
         }
         System.out.println(sb);
     }

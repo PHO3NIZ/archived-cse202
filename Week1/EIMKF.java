@@ -1,37 +1,30 @@
+package Week1;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class EICON {
+public class EIMKF {
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder();
         int n = ni();
         int m = ni();
-        int q = ni();
-        Vertex[] vertices = new Vertex[n + 1];
-        
-        // Init vertices
-        for(int i = 1; i < vertices.length; i++) {
+        Vertex[] vertices = new Vertex[n];
+        for (int i = 0; i < n; i++) {
             vertices[i] = new Vertex(i);
         }
-
-        // Add adjacent vertex into a vertex
-        for(int i = 0; i < m; i++) {
+        for (int i = 0; i < m; i++) {
             int u = ni();
             int v = ni();
+            vertices[u].addNeighbor(vertices[v]);
             vertices[v].addNeighbor(vertices[u]);
         }
-
-        // Query and output
-        for(int i = 0; i < q; i++) {
-            int a = ni();
-            int b = ni();
-            if (vertices[a].neighbors.contains(vertices[b])) {
-                sb.append("Y\n");
+        for (Vertex vertex : vertices) {
+            vertex.neighbors.sort((v1, v2) -> v1.id - v2.id);
+            sb.append(vertex.id + " " + vertex.neighbors.size() + " ");
+            for (int i = 0; i < vertex.neighbors.size(); i++) {
+                sb.append(vertex.neighbors.get(i).id + " ");
             }
-            else {
-                sb.append("N\n");
-            }
+            sb.append("\n");
         }
         System.out.println(sb);
     }
@@ -43,6 +36,7 @@ public class EICON {
         public Vertex(int id) {
             this.id = id;
         }
+
         public void addNeighbor(Vertex v) {
             neighbors.add(v);
         }

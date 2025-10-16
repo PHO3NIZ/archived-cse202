@@ -1,48 +1,46 @@
+package Week1;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class EIUHCON {
+public class EIFACEBOOK {
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder();
         int n = ni();
         int m = ni();
-        int q = ni();
         Vertex[] vertices = new Vertex[n + 1];
         for (int i = 1; i <= n; i++) {
-            vertices[i] = new Vertex(i);
+            String gender = ns();
+            vertices[i] = new Vertex(i, gender);
         }
         for (int i = 0; i < m; i++) {
             int u = ni();
             int v = ni();
-            vertices[v].addNeighbor(vertices[u]);
-        }
-        for (int i = 0; i < q; i++) {
-            int a = ni();
-            int b = ni();
-            if (vertices[a].neighbors.contains(vertices[b])) {
-                sb.append("Y\n");
-            } else {
-                ArrayList<Vertex> neighbors = vertices[a].neighbors;
-                boolean flag = false;
-                for (Vertex vertex : neighbors) {
-                    if (vertex.neighbors.contains(vertices[b])) {
-                        flag = true;
-                        break;
-                    }
-                }
-                sb.append(flag ? "Y\n" : "N\n");
+            if (!vertices[u].neighbors.contains(vertices[v])) {
+                vertices[u].addNeighbor(vertices[v]);
+                vertices[v].addNeighbor(vertices[u]);
             }
+        }
+        for (int i = 1; i <= n; i++) {
+            int count = 0;
+            for (Vertex vertex : vertices[i].neighbors) {
+                if (!vertices[i].gender.equals(vertex.gender)) {
+                    count++;
+                }
+            }
+            sb.append(count + " ");
         }
         System.out.println(sb);
     }
 
     static class Vertex {
         int id;
+        String gender;
         ArrayList<Vertex> neighbors = new ArrayList<>();
 
-        public Vertex(int id) {
+        public Vertex(int id, String gender) {
             this.id = id;
+            this.gender = gender;
         }
 
         public void addNeighbor(Vertex v) {
