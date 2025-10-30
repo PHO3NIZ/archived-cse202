@@ -4,74 +4,78 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class EIPEOYMK {
+public class EIFBF {
     static StringBuilder sb = new StringBuilder();
-    static HashMap<Integer, ArrayList<Vertex>> map = new HashMap<>();
 
     public static void main(String[] args) {
         int n = ni();
         int m = ni();
-        Vertex[] vertices = new Vertex[n];
-        for (int i = 0; i < n; i++) {
-            vertices[i] = new Vertex(i);
+        Vertex[] vertices = new Vertex[n + 1];
+        for (int i = 1; i <= n; i++) {
+            String gender = ns();
+            vertices[i] = new Vertex(i, gender);
         }
         for (int i = 0; i < m; i++) {
             int u = ni();
             int v = ni();
-            vertices[u].addNeighbor(vertices[v]);
-            vertices[v].addNeighbor(vertices[u]);
-        }
-        int u = ni();
-        bfs(vertices[u]);
-        int q = ni();
-        for (ArrayList<Vertex> v : map.values()) {
-            v.sort((v1, v2) -> v1.id - v2.id);
-        }
-        for (int i = 0; i < q; i++) {
-            int k = ni();
-            if (!map.containsKey(k)) {
-                sb.append("-1");
-            } else {
-                for (Vertex v : map.get(k)) {
-                    sb.append(v.id).append(" ");
-                }
+            if (!vertices[u].neighbors.contains(vertices[v])) {
+                vertices[u].addNeighbor(vertices[v]);
+                vertices[v].addNeighbor(vertices[u]);
             }
-            sb.append("\n");
+        }
+        ArrayList<Component> list = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            if (vertices[i] != null && vertices[i].isDiscover == false) {
+                Component component = new Component();
+                dfs(vertices[i], component);
+                list.add(component);
+            }
+        }
+        list.sort((c1, c2) -> c1.id - c2.id);
+        for (Component component : list) {
+            component.print();
         }
         System.out.println(sb);
     }
 
-    public static void bfs(Vertex v) {
-        Queue<Vertex> q = new ArrayDeque<Vertex>();
-        q.add(v);
+    public static void dfs(Vertex v, Component c) {
         v.isDiscover = true;
-        ArrayList<Vertex> temp = new ArrayList<>();
-        temp.add(v);
-        map.put(0, temp);
-        while (!q.isEmpty()) {
-            Vertex w = q.poll();
-            for (Vertex x : w.neighbors) {
-                if (!x.isDiscover) {
-                    x.isDiscover = true;
-                    x.distance = w.distance + 1;
-                    if (map.get(x.distance) == null) {
-                        map.put(x.distance, new ArrayList<>());
-                    }
-                    map.get(x.distance).add(x);
-                    q.add(x);
-                }
+        if (v.gender.equals("Nam")) {
+            c.male++;
+        } else {
+            c.female++;
+        }
+        c.id = Math.max(c.id, v.id);
+        for (Vertex w : v.neighbors) {
+            if (!w.isDiscover) {
+                dfs(w, c);
             }
+        }
+    }
+
+    static class Component {
+        int id;
+        int male;
+        int female;
+
+        public Component() {
+            this.id = -1;
+        }
+
+        public void print() {
+            sb.append(id).append(" ").append(male).append(" ").append(female).append("\n");
         }
     }
 
     static class Vertex {
         int id;
+        String gender;
         boolean isDiscover = false;
-        int distance = 0;
         ArrayList<Vertex> neighbors = new ArrayList<>();
 
-        public Vertex(int id) {
+        public Vertex(int id, String gender) {
             this.id = id;
+            this.gender = gender;
         }
 
         public void addNeighbor(Vertex v) {

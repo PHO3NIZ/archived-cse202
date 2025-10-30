@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class EIPEOYMK {
+public class EIPRF {
     static StringBuilder sb = new StringBuilder();
-    static HashMap<Integer, ArrayList<Vertex>> map = new HashMap<>();
 
     public static void main(String[] args) {
         int n = ni();
@@ -19,46 +18,37 @@ public class EIPEOYMK {
             int u = ni();
             int v = ni();
             vertices[u].addNeighbor(vertices[v]);
-            vertices[v].addNeighbor(vertices[u]);
         }
-        int u = ni();
-        bfs(vertices[u]);
-        int q = ni();
-        for (ArrayList<Vertex> v : map.values()) {
-            v.sort((v1, v2) -> v1.id - v2.id);
+        dfs(vertices[0]);
+        ArrayList<Vertex> list = new ArrayList<>();
+        while (finalVertex != null) {
+            list.add(finalVertex);
+            finalVertex = finalVertex.parent;
         }
-        for (int i = 0; i < q; i++) {
-            int k = ni();
-            if (!map.containsKey(k)) {
-                sb.append("-1");
-            } else {
-                for (Vertex v : map.get(k)) {
-                    sb.append(v.id).append(" ");
-                }
-            }
-            sb.append("\n");
+        for (int i = list.size() - 1; i >= 0; i--) {
+            sb.append(list.get(i).id).append(" ");
         }
         System.out.println(sb);
     }
 
-    public static void bfs(Vertex v) {
-        Queue<Vertex> q = new ArrayDeque<Vertex>();
-        q.add(v);
+    static Vertex finalVertex = null;
+
+    public static void dfs(Vertex v) {
         v.isDiscover = true;
-        ArrayList<Vertex> temp = new ArrayList<>();
-        temp.add(v);
-        map.put(0, temp);
-        while (!q.isEmpty()) {
-            Vertex w = q.poll();
-            for (Vertex x : w.neighbors) {
-                if (!x.isDiscover) {
-                    x.isDiscover = true;
-                    x.distance = w.distance + 1;
-                    if (map.get(x.distance) == null) {
-                        map.put(x.distance, new ArrayList<>());
-                    }
-                    map.get(x.distance).add(x);
-                    q.add(x);
+        for (Vertex w : v.neighbors) {
+            if (!w.isDiscover) {
+                w.parent = v;
+                dfs(w);
+            } else if (w.id == 0) {
+                Vertex temp = v;
+                int count = 0;
+                while (temp != null) {
+                    count++;
+                    temp = temp.parent;
+                }
+                if (count >= 3) {
+                    finalVertex = v;
+                    return;
                 }
             }
         }
@@ -67,8 +57,8 @@ public class EIPEOYMK {
     static class Vertex {
         int id;
         boolean isDiscover = false;
-        int distance = 0;
         ArrayList<Vertex> neighbors = new ArrayList<>();
+        Vertex parent = null;
 
         public Vertex(int id) {
             this.id = id;
