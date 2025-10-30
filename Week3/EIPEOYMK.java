@@ -1,10 +1,10 @@
-package Week2;
+package Week3;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class EIUBFS2 {
+public class EIPEOYMK {
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) {
@@ -23,8 +23,22 @@ public class EIUBFS2 {
         for (int i = 0; i < n; i++) {
             Collections.sort(vertices[i].neighbors, (v1, v2) -> v1.id - v2.id);
         }
-        if (vertices[0] != null) {
-            bfs(vertices[0]);
+        int u = ni();
+        bfs(vertices[u]);
+        int q = ni();
+        for (int i = 0; i < q; i++) {
+            int k = ni();
+            boolean flag = false;
+            for (int j = 0; j < vertices.length; j++) {
+                if (vertices[j].distance == k) {
+                    sb.append(vertices[j].id + " ");
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                sb.append("-1");
+            }
+            sb.append("\n");
         }
         System.out.println(sb);
     }
@@ -33,13 +47,12 @@ public class EIUBFS2 {
         Queue<Vertex> q = new ArrayDeque<Vertex>();
         q.add(v);
         v.isDiscover = true;
-        sb.append(v.id).append(" ");
         while (!q.isEmpty()) {
             Vertex w = q.poll();
             for (Vertex x : w.neighbors) {
                 if (!x.isDiscover) {
                     x.isDiscover = true;
-                    sb.append(x.id).append(" ");
+                    x.distance = w.distance + 1;
                     q.add(x);
                 }
             }
@@ -49,6 +62,7 @@ public class EIUBFS2 {
     static class Vertex {
         int id;
         boolean isDiscover = false;
+        int distance = 0;
         ArrayList<Vertex> neighbors = new ArrayList<>();
 
         public Vertex(int id) {
