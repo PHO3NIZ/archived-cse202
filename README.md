@@ -8,8 +8,8 @@ Tất cả những src code trong đây chỉ mang mục đích tham khảo.
 ## 🌐 Lab & Tiến độ hoàn thành
 
 1. [🔗 Lab 1](https://www.spoj.com/EIUPROGR/problems/dis2_01/) [6/6]
-2. [🔗 Lab 2](https://www.spoj.com/EIUPROGR/problems/dis2_02/) [2/8]
-3. [🔗 Lab 3](https://www.spoj.com/EIUPROGR/problems/dis2_03/)
+2. [🔗 Lab 2](https://www.spoj.com/EIUPROGR/problems/dis2_02/) [8/8]
+3. [🔗 Lab 3](https://www.spoj.com/EIUPROGR/problems/dis2_03/) [5/6]
 4. [🔗 Lab 4](https://www.spoj.com/EIUPROGR/problems/dis2_04/)
 5. [🔗 Lab 5](https://www.spoj.com/EIUPROGR/problems/dis2_05/)
 6. [🔗 Lab 6](https://www.spoj.com/EIUPROGR/problems/dis2_06/)
