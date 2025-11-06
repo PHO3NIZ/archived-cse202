@@ -1,4 +1,4 @@
-package Week3;
+package Week4;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,6 +55,21 @@ public class EIBIPARTITE {
                 } else if (x.color == w.color) {
                     return false;
                 }
+            }
+        }
+        return true;
+    }
+
+    public static boolean dfs(Vertex v, int color) {
+        v.isDiscover = true;
+        v.color = color;
+        for (Vertex w : v.neighbors) {
+            if (!w.isDiscover) {
+                if (!dfs(w, 3 - v.color)) {
+                    return false;
+                }
+            } else if (w.color == v.color) {
+                return false;
             }
         }
         return true;
